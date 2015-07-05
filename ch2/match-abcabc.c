@@ -1,3 +1,21 @@
+/**
+ * Exercise 2.1 asks to implement a program that queries the filesize of a 
+ * file, allocates memory for it, loads the file into memory and counts the
+ * occurences of the string 'abcabc'. Matches may overlap, so 'abcabcabc' has
+ * 2 matches. The program should be as fast as possible.
+ * 
+ * To count the occurences I built a state machine that may transition into 
+ * the next state with inputs a, b or c. Any other input will transition to
+ * state 0. The state machine deals well with overlaps and it runs in Θ(n) 
+ * time. To further speed the program up, calculating the next transition from
+ * a state and an input is done without branching.
+ *
+ * The program does make a few assumptions: 
+ *   - Characters are sizeof(char) bits. It probably breaks under encodings
+ *     that use more space and espicially variable width.
+ *   - The computer it runs on represents negative integers as two's complement
+ */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -37,7 +55,7 @@ long readFileToBuffer(char *fileName, char **buffer) {
         (*buffer)[++newLen] = '\0'; /* Just to be safe. */
         fclose(fp);
     } else {
-        return -1;
+        return -1; // Error
     }
 }
 
@@ -57,13 +75,17 @@ int countAbcabc(char *data) {
     int abcabcCount = 0;
 
     for(char *pos = data; *pos; ++pos) {
-        // if character is not a, b or c, noTransition = 1, otherwise it is 0
+        // If input is a, b or c, noTransition is 0, otherwise it is 1
         int noTransition = *pos < 'a' | *pos > 'c';
 
-        // noTransition - 1 is 0xFF FF FF if noTransition was 0, otherwise it is 0x00 00 00
+        // Assuming two's complement, -1 is 0xFF FF FF and 0 is 0x00 00 00. 
+        // This results in the index being masked to 0 if the input is not a,
+        // b or c. If it is, the resulting index will be 1, 2 or 3. 
         int transIndex = (noTransition - 1) & (*pos - 'a' + 1);
         int transition = states[currentState][transIndex];
 
+        // If we are in the last state (5) and matched the right character
+        // (transition is 3), we had a match and increase the count.
         abcabcCount += transition + currentState == 8;
         currentState = transition;
     }
