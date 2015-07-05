@@ -22,7 +22,6 @@ long getFileSize(FILE *fp) {
 long readFileToBuffer(char *fileName, char **buffer) {
     FILE *fp = fopen(fileName, "r");
     if (fp) {
-
         long bufsize = getFileSize(fp);
         if (bufsize == -1) 
             return -1; // Error
@@ -31,11 +30,11 @@ long readFileToBuffer(char *fileName, char **buffer) {
         *buffer = malloc(sizeof(char) * (bufsize + 1));
 
         /* Read the entire file into memory. */
-        size_t newLen = fread(buffer, sizeof(char), bufsize, fp);
+        size_t newLen = fread(*buffer, sizeof(char), bufsize, fp);
         if (newLen == 0)
             return -1; // Error
 
-        buffer[++newLen] = '\0'; /* Just to be safe. */
+        (*buffer)[++newLen] = '\0'; /* Just to be safe. */
         fclose(fp);
     } else {
         return -1;
@@ -65,8 +64,6 @@ int countAbcabc(char *data) {
         int transIndex = (noTransition - 1) & (*pos - 'a' + 1);
         int transition = states[currentState][transIndex];
 
-        printf("char: %c, state: %d, t: %d, d: %d\n", *pos, currentState, transition, transition + currentState == 8);
-
         abcabcCount += transition + currentState == 8;
         currentState = transition;
     }
@@ -74,12 +71,10 @@ int countAbcabc(char *data) {
 }
 
 int main(int argc, char ** args) {
-    //char *source;
-    //long fileSize = readFileToBuffer(args[0], &source);
-
-    while (argc --> 1)
-        printf("count: %d\n\n", countAbcabc(args[argc]));
-
-
-    //free(source); /* Don't forget to call free() later! */
+    char *source;
+    for (int i = 1; i < argc; ++i) {
+        long fileSize = readFileToBuffer(args[i], &source);
+        printf("'%s' has %d matches\n", args[i], countAbcabc(source));
+        free(source); 
+    }
 }
