@@ -44,34 +44,26 @@ long readFileToBuffer(char *fileName, char **buffer) {
 
 int countAbcabc(char *data) {
     
-    int states[7][3] = {
-         /*a, b, c*/   
-    /*0*/{ 1, 0, 0 },
-    /*1*/{ 1, 2, 0 },
-    /*2*/{ 1, 0, 3 },
-    /*3*/{ 4, 0, 0 },
-    /*4*/{ 1, 5, 0 },
-    /*5*/{ 1, 0, 3 }
+    int states[6][4] = {
+    /*     *, a, b, c */
+    /*0*/{ 0, 1, 0, 0 },
+    /*1*/{ 0, 1, 2, 0 },
+    /*2*/{ 0, 1, 0, 3 },
+    /*3*/{ 0, 4, 0, 0 },
+    /*4*/{ 0, 1, 5, 0 },
+    /*5*/{ 0, 1, 0, 3 }
     };
 
     int currentState = 0;
     int abcabcCount = 0;
 
-    char *foo = malloc(sizeof(char) * 16);
-
-    printf("foo: %d\n", foo[-200]);
-
     for(char *pos = data; *pos; ++pos) {
-        int transIndex = *pos - 'a';
         // if character is not a, b or c, noTransition = 1, otherwise it is 0
         int noTransition = *pos < 'a' | *pos > 'c';
 
-        // int transition = noTransition ? 0 : states[currentState][transIndex];
-        // the following code assumes two's complement and is a branchless version of the
-        // code above.
-
         // noTransition - 1 is 0xFF FF FF if noTransition was 0, otherwise it is 0x00 00 00
-        int transition = (noTransition - 1) & states[currentState][transIndex];
+        int transIndex = (noTransition - 1) & (*pos - 'a' + 1);
+        int transition = states[currentState][transIndex];
 
         printf("char: %c, state: %d, t: %d, d: %d\n", *pos, currentState, transition, transition + currentState == 8);
 
