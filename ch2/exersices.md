@@ -8,14 +8,17 @@
     1. `/0*10*10*/`
     2. `/1?(0+1)*0*/`
     3. `/(0*10*10*)+/`
-7. 
+
+7. ---
 8. 
     * `/a?*/` means one or zero a's, zero or more times -- or: zero or more a's.
     * `/a**/` means zero or more a's, zero or more times -- or: zero or more a's.
 
     These expressions are not erroneous. They are also not ambiguous in that there is no string that both matches and doesn't match the expression.
-9. 
-    1. 
+    
+9. .
+    1. .
+        ```
             letter               = [A-Za-z]
             digit                = [0-9]
             letgit               = letter | digit
@@ -23,8 +26,9 @@
             letgit_hyphen_string = letgit_hyphen+
             label                = letter '(' letgit_hyphen_string? letgit ')' '?'
             url                  = label ('.' label)*
+        ```
 
-    2. 
+    2. .
         ```
             url = [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?' ('.' [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?')*
         ```
