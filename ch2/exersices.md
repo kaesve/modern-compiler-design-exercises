@@ -16,7 +16,6 @@
     These expressions are not erroneous. They are also not ambiguous in that there is no string that both matches and doesn't match the expression.
 9. 
     1. 
-        ```
             letter               = [A-Za-z]
             digit                = [0-9]
             letgit               = letter | digit
@@ -24,12 +23,13 @@
             letgit_hyphen_string = letgit_hyphen+
             label                = letter '(' letgit_hyphen_string? letgit ')' '?'
             url                  = label ('.' label)*
-        ```
+
     2. 
         ```
             url = [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?' ('.' [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?')*
         ```
-10. . 
+        
+10. 
     ``` c
     void skip_layout_and_comment(void) {
         while (is_layout(input_char)) { next_char(); }
