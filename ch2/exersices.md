@@ -4,10 +4,10 @@
 3. ---
 4. Newlines do not mean the same as a space in every context. Some contexts in which they differ are in string literals and in single line comments.
 5. ---
-6.
-    a. `/0*10*10*/`
-    b. `/1?(0+1)*0*/`
-    c. `/(0*10*10*)+/`
+6. 
+    1. `/0*10*10*/`
+    2. `/1?(0+1)*0*/`
+    3. `/(0*10*10*)+/`
 7. 
 8. 
     * `/a?*/` means one or zero a's, zero or more times -- or: zero or more a's.
@@ -15,21 +15,21 @@
 
     These expressions are not erroneous. They are also not ambiguous in that there is no string that both matches and doesn't match the expression.
 9. 
-    a.
+    1. 
         ```
-        letter               = [A-Za-z]
-        digit                = [0-9]
-        letgit               = letter | digit
-        letgit_hyphen        = letgit | '-'
-        letgit_hyphen_string = letgit_hyphen+
-        label                = letter '(' letgit_hyphen_string? letgit ')' '?'
-        url                  = label ('.' label)*
-        ``` 
-    b. 
+            letter               = [A-Za-z]
+            digit                = [0-9]
+            letgit               = letter | digit
+            letgit_hyphen        = letgit | '-'
+            letgit_hyphen_string = letgit_hyphen+
+            label                = letter '(' letgit_hyphen_string? letgit ')' '?'
+            url                  = label ('.' label)*
         ```
-        url = [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?' ('.' [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?')*
+    2. 
         ```
-10. 
+            url = [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?' ('.' [A-Za-z] '(' ([A-Za-z] | [digit] | '-')? ([A-Za-z] | [digit]) ')' '?')*
+        ```
+10. . 
     ``` c
     void skip_layout_and_comment(void) {
         while (is_layout(input_char)) { next_char(); }
@@ -43,6 +43,7 @@
         } while (nest_depth > 0);
         while (is_layout(input_char)) { next_char(); }
     }
+    ```
 11. ---
 12. String literals could contain the other characters.
 13. Because the algorithm tries to find the longest match of the regular experssion, not just any match.
